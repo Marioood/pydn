@@ -1,7 +1,29 @@
 {
   "foo": "bar",
-  "abc": 123,
+  "abc": -123,
   "bool": True,
   "has_balls": False,
-  "dgdfg": None
+  #holy shit, this works!
+  "txt_list": [
+    "a",
+    [
+      1,
+      2,
+      3,
+      {
+        "foo": "bar",
+        "ahh": None,
+        "balls": 3.1415,
+        "abc": -123,
+        "a": -inf,
+        "bool": True,
+        "c": nan
+      },
+      False,
+      None
+    ]
+    "b",
+    "c",
+    True,
+  ]
 }

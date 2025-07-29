@@ -1,5 +1,7 @@
 {
   "foo": "bar",
   "abc": 123,
-  "dict": "test"
+  "bool": True,
+  "has_balls": False,
+  "dgdfg": None
 }

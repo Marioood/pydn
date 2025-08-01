@@ -3,6 +3,9 @@
   "abc": -123,
   "bool": True,
   "has_balls": False,
+  #"bin": 0b10,
+  #"hex": 0x10,
+  #"oct": 0o10,
   #holy shit, this works!
   "txt_list": [
     "a",
@@ -21,9 +24,9 @@
       },
       False,
       None
-    ]
+    ],
     "b",
     "c",
-    True,
+    True
   ]
 }

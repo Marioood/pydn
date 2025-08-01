@@ -2,17 +2,15 @@ import math
 
 def main() -> int:
   #maybe??????
+  #TODO: complex numbers
   #TODO: sets
   #TODO: data skeletons, to verify that the data is correct
-  #TODO: tuples
   
   #definitely do
   #TODO: force commas
   #TODO: escape characters
-  #TODO: complex numbers
+  #TODO: tuples
   #TODO: single quotes
-  #TODO: ways of writing ints (bin hex oct)
-  #TODO?: rewrite in a more modular way, where elements are split by colons and commas and the types are converted in a similar fashion to json.dumps()
   
   #TODO: better errors
   #TODO: pass file name for errors ? ? ? ?
@@ -37,52 +35,12 @@ def main() -> int:
   
   f = open("test.pydn")
   raw_text = f.read()
+  parse_pydn_leaf(raw_text, 0, 0)
   
-  print(decode(raw_text))
   f.close()
-  
-  
-  """raw_dict = {
-    "foo": "bar",
-    "abc": -123,
-    "bool": True,
-    "has_balls": False,
-    #holy shit, this works!
-    "txt_list": [
-      "a",
-      [
-        1,
-        2,
-        3,
-        {
-          "foo": "bar",
-          "ahh": None,
-          "balls": 3.1415,
-          "abc": -123,
-          "a": -math.inf,
-          "bool": True,
-          "c": math.nan
-        },
-        False,
-        None
-      ],
-      "b",
-      "c",
-      True
-    ]
-  }
-
-  print(encode(raw_dict))"""
-  
   return 0
 
-def decode(raw_text) -> dict:
-  return decode_dict_leaf(raw_text, 0, 0)
-
-def encode(raw_dict) -> str:
-  return encode_dict(raw_dict, 1)
-  
-def decode_dict_leaf(raw_text, starting_idx, starting_depth) -> dict:
+def parse_pydn_leaf(raw_text, starting_idx, starting_depth) -> dict:
   #sort of a combined lexer and parser. should be fine for such a simple format.
   cur_depth = starting_depth
   cur_string = ""
@@ -217,7 +175,7 @@ def decode_dict_leaf(raw_text, starting_idx, starting_depth) -> dict:
         cur_depth += 1
         is_reading_another_dict = True
         if is_reading_list:
-          list_stack[cur_list_idx].append(decode_dict_leaf(raw_text, i, cur_depth))
+          list_stack[cur_list_idx].append(parse_pydn_leaf(raw_text, i, cur_depth))
           
         else:
           parsed[cur_key] = parse_pydn_leaf(raw_text, i, cur_depth)
@@ -326,80 +284,10 @@ def decode_dict_leaf(raw_text, starting_idx, starting_depth) -> dict:
       
   raise EOFError("reached end of file in parse_pydn_leaf()")
 
-def encode_dict_leaf(raw_dict, starting_depth) -> str:
+def encode(raw_dict) -> str:
   #leave comment at the top of the output?
-  #verbose and compact output?
-  output_text = "{\n"
-  depth = starting_depth
-  i = 0
-  for key in raw_dict:
-    spacing = "  " * depth
-    value = raw_dict[key]
-    value_type = type(value)
-    
-    if value_type == str:
-      output_text += '{}"{}": "{}"'.format(spacing, key, value)
-
-    elif value_type == dict:
-      output_text += '{}"{}": {}'.format(spacing, key, encode_dict(value, depth + 1))
-
-    elif value_type == list:
-      output_text += '{}"{}": {}'.format(spacing, key, encode_list(value, depth + 1))
-      
-    elif value_type == int or value_type == float or value_type == bool or value == None:
-      output_text += '{}"{}": {}'.format(spacing, key, value)
-      
-    else:
-      raise NotImplementedError("Type {} is not implemented in PyDN.".format(value_type))
-    
-    
-    
-    if i == len(raw_dict) - 1:
-      output_text += "\n"
-    else:
-      output_text += ",\n"
-    
-    i += 1
-  
-  output_text += "  " * (depth - 1) + '}'
-  
-  return output_text
-  
-def encode_list_leaf(raw_list, starting_depth) -> str:
-  output_text = "[\n"
-  depth = starting_depth
-  i = 0
-  for item in raw_list:
-    spacing = "  " * depth
-    item_type = type(item)
-    
-    if item_type == str:
-      output_text += spacing + '"' + item + '"'
-
-    elif item_type == dict:
-      output_text += spacing + encode_dict(item, depth + 1)
-
-    elif item_type == list:
-      output_text += spacing + encode_list(item, depth + 1)
-      
-    elif item_type == int or item_type == float or item_type == bool or item == None:
-      output_text += spacing + str(item)
-      
-    else:
-      raise NotImplementedError("Type {} is not implemented in PyDN.".format(value_type))
-    
-    
-    
-    if i == len(raw_list) - 1:
-      output_text += "\n"
-    else:
-      output_text += ",\n"
-    
-    i += 1
-  
-  output_text += "  " * (depth - 1) + ']'
-  
-  return output_text
+  raise NotImplementedError()
+#  for key in raw_dict:
 
 def is_numeral_ascii(string):
   #the vanilla isnumeric() counts weird unicode characters (like exponent signs) as numerals for some reason.
